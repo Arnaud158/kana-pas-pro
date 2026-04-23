@@ -2,11 +2,12 @@
 import ChooseKanaLevelComponent from '@/components/ChooseKanaLevelComponent.vue'
 import PreviousAnswerComponent from '@/components/PreviousAnswerComponent.vue'
 import ProgressBarComponent from '@/components/ProgressBarComponent.vue'
+import StageDescriptionComponent from '@/components/StageDescriptionComponent.vue'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { useQuestionStore } from '@/stores/questionStore'
 import { useStageStore } from '@/stores/stageStore'
 import type { LevelOneQuestion } from '@/types/questions'
-import { computed, onBeforeMount, watch } from 'vue'
+import { computed, onBeforeMount, ref, watch } from 'vue'
 
 const questionStore = useQuestionStore()
 const stageStore = useStageStore()
@@ -14,6 +15,7 @@ const gameStateStore = useGameStateStore()
 
 const question = computed<LevelOneQuestion>(() => questionStore.currentQuestion as LevelOneQuestion)
 const progression = computed<number>(() => stageStore.currentProgress)
+const displayGame = ref<boolean>(false)
 
 watch(progression, () => {
   if (!stageStore.isStageFinished()) return
@@ -26,16 +28,24 @@ onBeforeMount(() => {
 </script>
 <template>
   <div class="text-center question col-xs-12">
-    <PreviousAnswerComponent
-      :previous-question="questionStore.previousQuestion ?? undefined"
-      :correct-answer="questionStore.previousQuestionWasCorrect ?? undefined"
+    <StageDescriptionComponent
+      title="Stage 1"
+      description="Choose one"
+      @done="() => (displayGame = true)"
+      v-if="!displayGame"
     />
-    <ChooseKanaLevelComponent
-      :correct-answer="question.correctAnswer"
-      :possibilties="question.possibleAnswers"
-      mode="showKana"
-    />
-    <ProgressBarComponent />
+    <template v-if="displayGame">
+      <PreviousAnswerComponent
+        :previous-question="questionStore.previousQuestion ?? undefined"
+        :correct-answer="questionStore.previousQuestionWasCorrect ?? undefined"
+      />
+      <ChooseKanaLevelComponent
+        :correct-answer="question.correctAnswer"
+        :possibilties="question.possibleAnswers"
+        mode="showKana"
+      />
+      <ProgressBarComponent />
+    </template>
   </div>
 </template>
 <style lang="scss" scoped>

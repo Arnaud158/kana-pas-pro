@@ -37,7 +37,9 @@ const formatAnswer = (kana: Kana): string => {
   return ''
 }
 
-const handleAnswerClick = (kana: Kana) => {
+const handleAnswerClick = (kana: Kana, event: PointerEvent) => {
+  const currentBtn = event.currentTarget as HTMLElement
+  currentBtn.blur()
   const isCorrectAnswer = kana.kana === props.correctAnswer.kana
   questionStore.handleQuestionAnswer(isCorrectAnswer)
 }
@@ -50,7 +52,7 @@ const handleAnswerClick = (kana: Kana) => {
       v-bind:key="kana.kana"
       class="btn btn-default answer-button"
       :class="{ 'no-hover': isTouchDevice }"
-      @click="() => handleAnswerClick(kana)"
+      @click="(event) => handleAnswerClick(kana, event)"
     >
       {{ formatAnswer(kana) }}
     </button>

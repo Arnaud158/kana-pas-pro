@@ -14,6 +14,10 @@ const questionStore = useQuestionStore()
 
 const userInput = ref<string>('')
 
+const vFocus = {
+  mounted: (el: HTMLInputElement) => el.focus(),
+}
+
 const formatedQuestion = computed<string>((): string => {
   return props.correctAnswer.map((kana) => kana.kana).join('')
 })
@@ -46,7 +50,7 @@ const handleAnswer = (e: SubmitEvent) => {
   <div class="answer-container">
     <div class="answer-form-container">
       <form @submit="handleAnswer">
-        <input autofocus class="answer-input" type="text" v-model="userInput" />
+        <input v-focus class="answer-input" type="text" v-model="userInput" />
       </form>
     </div>
   </div>
