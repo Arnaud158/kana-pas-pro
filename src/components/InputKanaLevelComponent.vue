@@ -30,7 +30,6 @@ const computeAllAnswerPossibilities = computed<string[]>(() => {
     const test = cartesianProductMultiple(romajis[0]!, romajis[1]!, romajis[2]!).map((str) =>
       str.join(''),
     )
-    console.log(test)
     return test.flat()
   }
   return ['']

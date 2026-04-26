@@ -83,4 +83,9 @@ const handleAnswerClick = (kana: Kana, event: PointerEvent) => {
     margin: 0px 0 15px;
   }
 }
+.no-hover {
+  /* disables hover effect on touch screens */
+  background-color: #fff;
+  border-color: #ccc;
+}
 </style>
