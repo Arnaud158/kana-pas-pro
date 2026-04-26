@@ -69,7 +69,7 @@ watchEffect(() => {
           <div class="col-xs-12">
             <div class="panel panel-default">
               <div class="panel-body welcome">
-                <h4>Welcome to Kana Pro!</h4>
+                <h4>Welcome to Kana Pas Pro!</h4>
                 <p>Please choose the groups of characters that you'd like to be studying.</p>
               </div>
             </div>

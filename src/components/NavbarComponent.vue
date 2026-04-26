@@ -15,15 +15,7 @@ const gameState = useGameStateStore()
               Back to menu
             </a>
           </li>
-          <!-- { this.props.gameState == 'game' ? (
-          <li id="nav-choosecharacters">
-            <a href="javascript:;" onClick="{this.props.handleEndGame}">
-              <span class="glyphicon glyphicon-small glyphicon-arrow-left"></span> Back to menu
-            </a>
-          </li>
-          ) : -->
-          <li v-else><p class="nav navbar-text">Kana Pro</p></li>
-          <!-- } -->
+          <li v-else><p class="nav navbar-text">Kana Pas Pro</p></li>
         </ul>
       </div>
     </div>
