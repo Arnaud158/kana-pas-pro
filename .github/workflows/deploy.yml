@@ -24,17 +24,22 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v6
 
+      - name: Installation de pnpm
+        uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
       - name: Installation de Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Installation des dépendances
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build du projet Vue/Vite
-        run: npx vite build --base=/kana-pas-pro/
+        run: pnpm exec vite build --base=/kana-pas-pro/
 
       - name: Configuration de GitHub Pages
         uses: actions/configure-pages@v6
