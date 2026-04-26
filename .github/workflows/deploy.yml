@@ -1,0 +1,49 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v6
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Build du projet Vue/Vite
+        run: npx vite build --base=/kana-pas-pro/
+
+      - name: Configuration de GitHub Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload du dossier dist
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: './dist'
+
+      - name: Déploiement sur GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
