@@ -7,9 +7,11 @@ import { useQuestionStore } from '@/stores/questionStore'
 import { useStageStore } from '@/stores/stageStore'
 import type { LevelThreeQuestion } from '@/types/questions'
 import { computed, onBeforeMount, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const questionStore = useQuestionStore()
 const stageStore = useStageStore()
+const { t } = useI18n()
 
 const question = computed<LevelThreeQuestion>(
   () => questionStore.currentQuestion as LevelThreeQuestion,
@@ -31,8 +33,8 @@ onBeforeMount(() => {
 <template>
   <div class="text-center question col-xs-12">
     <StageDescriptionComponent
-      title="Stage 3"
-      description="Write the answer"
+      :title="t('level3.level3Title')"
+      :description="t('level3.level3Description')"
       @done="() => (displayGame = true)"
       v-if="!displayGame"
     />

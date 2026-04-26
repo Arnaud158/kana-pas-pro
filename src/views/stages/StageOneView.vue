@@ -8,10 +8,12 @@ import { useQuestionStore } from '@/stores/questionStore'
 import { useStageStore } from '@/stores/stageStore'
 import type { LevelOneQuestion } from '@/types/questions'
 import { computed, onBeforeMount, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const questionStore = useQuestionStore()
 const stageStore = useStageStore()
 const gameStateStore = useGameStateStore()
+const { t } = useI18n()
 
 const question = computed<LevelOneQuestion>(() => questionStore.currentQuestion as LevelOneQuestion)
 const progression = computed<number>(() => stageStore.currentProgress)
@@ -29,8 +31,8 @@ onBeforeMount(() => {
 <template>
   <div class="text-center question col-xs-12">
     <StageDescriptionComponent
-      title="Stage 1"
-      description="Choose one"
+      :title="t('level1.level1Title')"
+      :description="t('level1.level1Description')"
       @done="() => (displayGame = true)"
       v-if="!displayGame"
     />

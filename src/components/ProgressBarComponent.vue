@@ -2,9 +2,11 @@
 import { useLockStore } from '@/stores/lockStore'
 import { useStageStore } from '@/stores/stageStore'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 const lockStore = useLockStore()
 const stageStore = useStageStore()
+const { t } = useI18n()
 
 const stageProgressPercentage = computed<number>(() => {
   return Math.round((stageStore.currentProgress / stageStore.stageLength) * 100)
@@ -21,8 +23,10 @@ const stageProgressPercentage = computed<number>(() => {
     ></progress>
 
     <span class="progress-text">
-      Stage {{ stageStore.getCurrentStage() }}
-      <span v-if="lockStore.isLocked">&nbsp;(Locked)</span>
+      {{ t('progressBarComponent.progressBarStageText') }} {{ stageStore.getCurrentStage() }}
+      <span v-if="lockStore.isLocked"
+        >&nbsp;{{ t('progressBarComponent.progressBarLockText') }}</span
+      >
     </span>
   </div>
 </template>

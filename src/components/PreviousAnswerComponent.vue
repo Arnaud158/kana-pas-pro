@@ -2,6 +2,7 @@
 import type Kana from '@/types/kana'
 import type { GameQuestion } from '@/types/questions'
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   previousQuestion?: GameQuestion
@@ -9,6 +10,7 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const formattedAnswer = computed(() => {
   const question = props.previousQuestion
@@ -41,7 +43,9 @@ const formattedAnswer = computed(() => {
     {{ formattedAnswer }}
     <span class="pull-right glyphicon glyphicon-remove"></span>
   </div>
-  <div v-else class="previous-result none">Let's go! Which character is this?</div>
+  <div v-else class="previous-result none">
+    {{ t('previousAnserComponent.previousAnswerNone') }}
+  </div>
 </template>
 <style lang="scss" scoped>
 .previous-result {

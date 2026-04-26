@@ -1,6 +1,15 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import NavbarComponent from './components/NavbarComponent.vue'
+import { useI18n } from 'vue-i18n'
+import { watchEffect } from 'vue'
+
+const { t, locale } = useI18n()
+
+watchEffect(() => {
+  document.title = t('html.htmlTitle')
+  document.documentElement.lang = locale.value
+})
 </script>
 
 <template>

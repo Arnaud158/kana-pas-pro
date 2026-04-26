@@ -1,0 +1,7 @@
+{
+  "welcomePanelTitle": "Welcome to Kana Pas Pro!",
+  "welcomePanelSubtitle": "Please choose the groups of characters that you'd like to be studying.",
+  "welcomeStartButton": "Start the Quiz!",
+  "welcomePanelErrorNothingIsChoosed": "Choose at least one group!",
+  "welcomeScrollToStartButton": "Start"
+}

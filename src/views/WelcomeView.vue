@@ -6,13 +6,14 @@ import { useChoosenKanaStore } from '@/stores/choosenKanaStore'
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { useStageStore } from '@/stores/stageStore'
 import { onMounted, onUnmounted, ref, watchEffect } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
 const choosenKanaStore = useChoosenKanaStore()
 const gameStore = useGameStateStore()
 const stageStore = useStageStore()
 const router = useRouter()
-
+const { t } = useI18n()
 const cantStartGameBecauseNothingIsChoosed = ref<boolean>(false)
 
 const startButtonRef = ref<HTMLElement | null>(null)
@@ -69,27 +70,35 @@ watchEffect(() => {
           <div class="col-xs-12">
             <div class="panel panel-default">
               <div class="panel-body welcome">
-                <h4>Welcome to Kana Pas Pro!</h4>
-                <p>Please choose the groups of characters that you'd like to be studying.</p>
+                <h4>{{ t('welcomeView.welcomePanelTitle') }}</h4>
+                <p>{{ t('welcomeView.welcomePanelSubtitle') }}</p>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <ChooseKanaComponent title="Hiragana · ひらがな" :kanaGroups="kanaDictionary.hiragana" />
-          <ChooseKanaComponent title="Katakana · カタカナ" :kanaGroups="kanaDictionary.katakana" />
+          <ChooseKanaComponent
+            :title="t('chooseKanaComponent.chooseKanaHiraganaTitle')"
+            :kanaGroups="kanaDictionary.hiragana"
+          />
+          <ChooseKanaComponent
+            :title="t('chooseKanaComponent.chooseKanaKatakanaTitle')"
+            :kanaGroups="kanaDictionary.katakana"
+          />
           <div class="col-sm-3 col-xs-12 pull-right">
             <LockLevelComponent />
           </div>
           <div class="col-sm-offset-3 col-sm-6 col-xs-12 text-center">
             <div v-if="cantStartGameBecauseNothingIsChoosed" class="error-message">
-              Choose at least one group!
+              {{ t('welcomeView.welcomePanelErrorNothingIsChoosed') }}
             </div>
             <button ref="startButtonRef" class="btn btn-danger startgame-button" @click="startGame">
-              Start the Quiz!
+              {{ t('welcomeView.welcomeStartButton') }}
             </button>
           </div>
-          <div v-show="!isStartVisible" class="down-arrow" @click="scrollToStartButton">Start</div>
+          <div v-show="!isStartVisible" class="down-arrow" @click="scrollToStartButton">
+            {{ t('welcomeView.welcomeScrollToStartButton') }}
+          </div>
         </div>
       </div>
     </div>

@@ -2,7 +2,10 @@
 import { useLockStore } from '@/stores/lockStore'
 import type { StageLevel } from '@/types/stageLevel'
 import { ref, watchEffect } from 'vue'
+import { useI18n } from 'vue-i18n'
+
 const lockStore = useLockStore()
+const { t } = useI18n()
 
 const lockLevel = ref<string>(lockStore.lockLevel)
 
@@ -14,7 +17,7 @@ watchEffect(() => {
 </script>
 <template>
   <span class="pull-right lock"
-    >Lock to stage &nbsp;
+    >{{ t('lockLevelComponent.lockLevelText') }} &nbsp;
     <select v-model="lockLevel" v-if="lockStore.isLocked" class="stage-choice">
       <option value="1" selected>1</option>
       <option value="2">2</option>

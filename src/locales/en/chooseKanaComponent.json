@@ -1,0 +1,10 @@
+{
+  "chooseKanaHiraganaTitle": "Hiragana · ひらがな",
+  "chooseKanaKatakanaTitle": "Katakana · カタカナ",
+  "chooseKanaAlternativeCharacters": "Alternative characters (ga · ba · kya..)",
+  "chooseKanaLookAlikeCharacters": "Look-alike characters",
+  "chooseKanaFilterAll": "All",
+  "chooseKanaFilterNone": "None",
+  "chooseKanaFilterAllAlternative": "All alternative",
+  "chooseKanaFilterNoAlternative": "No alternative"
+}

@@ -2,6 +2,7 @@
 import { useChoosenKanaStore } from '@/stores/choosenKanaStore'
 import type KanaGroup from '@/types/kanaGroup'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   kanaGroups: KanaGroup[]
@@ -10,6 +11,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const choosenKanaStore = useChoosenKanaStore()
+const { t } = useI18n()
 
 const showAlternatives = ref<boolean>(false)
 const showAlike = ref<boolean>(false)
@@ -106,7 +108,7 @@ const getKana = (kanaGroup: KanaGroup): string => {
             @click="(e) => handleToggleGroup(altGroups, altSelectionStatus, e)"
           ></span>
           <span class="toggle-caret">{{ showAlternatives ? '▲' : '▼' }}</span>
-          Alternative characters (ga · ba · kya..)
+          {{ t('chooseKanaComponent.chooseKanaAlternativeCharacters') }}
         </div>
 
         <template v-if="showAlternatives">
@@ -146,7 +148,7 @@ const getKana = (kanaGroup: KanaGroup): string => {
             @click="(e) => handleToggleGroup(alikeGroups, alikeSelectionStatus, e)"
           ></span>
           <span class="toggle-caret">{{ showAlike ? '▲' : '▼' }}</span>
-          Look-alike characters
+          {{ t('chooseKanaComponent.chooseKanaLookAlikeCharacters') }}
         </div>
 
         <template v-if="showAlike">
@@ -176,13 +178,21 @@ const getKana = (kanaGroup: KanaGroup): string => {
         </template>
       </div>
       <div class="panel-footer">
-        <button type="button" class="btn btn-link" @click="selectAll">All</button>
+        <button type="button" class="btn btn-link" @click="selectAll">
+          {{ t('chooseKanaComponent.chooseKanaFilterAll') }}
+        </button>
         &nbsp;&middot;&nbsp;
-        <button type="button" class="btn btn-link" @click="selectNone">None</button>
+        <button type="button" class="btn btn-link" @click="selectNone">
+          {{ t('chooseKanaComponent.chooseKanaFilterNone') }}
+        </button>
         &nbsp;&middot;&nbsp;
-        <button type="button" class="btn btn-link" @click="selectAllAlt">All alternative</button>
+        <button type="button" class="btn btn-link" @click="selectAllAlt">
+          {{ t('chooseKanaComponent.chooseKanaFilterAllAlternative') }}
+        </button>
         &nbsp;&middot;&nbsp;
-        <button type="button" class="btn btn-link" @click="selectNoneAlt">No alternative</button>
+        <button type="button" class="btn btn-link" @click="selectNoneAlt">
+          {{ t('chooseKanaComponent.chooseKanaFilterNoAlternative') }}
+        </button>
       </div>
     </div>
   </div>

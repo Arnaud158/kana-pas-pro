@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { useGameStateStore } from '@/stores/gameStateStore'
 import { useLockStore } from '@/stores/lockStore'
+import { useI18n } from 'vue-i18n'
 
 const gameStateStore = useGameStateStore()
 const lockStore = useLockStore()
+const { t } = useI18n()
 
 const handleKeepPlaying = () => {
   lockStore.isLocked = true
@@ -13,15 +15,17 @@ const handleKeepPlaying = () => {
 </script>
 <template>
   <div class="text-center show-end">
-    <h1>Congratulations!</h1>
-    <h3>You have passed all 4 stages.</h3>
-    <h4>Would you like to keep playing or go back to menu?</h4>
+    <h1>{{ t('endView.endTitle') }}</h1>
+    <h3>{{ t('endView.endSubTitle') }}</h3>
+    <h4>{{ t('endView.endDescription') }}</h4>
     <p>
-      <button class="btn btn-danger keep-playing" @click="handleKeepPlaying">Keep playing</button>
+      <button class="btn btn-danger keep-playing" @click="handleKeepPlaying">
+        {{ t('endView.endKeepPlayingButton') }}
+      </button>
     </p>
     <p>
       <button class="btn btn-danger back-to-menu" @click="gameStateStore.finishGame">
-        Back to menu
+        {{ t('endView.endBackToMenuButton') }}
       </button>
     </p>
   </div>

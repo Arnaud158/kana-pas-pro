@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useGameStateStore } from '@/stores/gameStateStore'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 
 const gameState = useGameStateStore()
+const { t } = useI18n()
 </script>
 
 <template>
@@ -12,10 +15,15 @@ const gameState = useGameStateStore()
           <li v-if="gameState.gameState === 'game'">
             <a @click="gameState.finishGame">
               <span class="glyphicon glyphicon-small glyphicon-arrow-left"></span>
-              Back to menu
+              {{ t('navbarComponent.navbarBackToMenu') }}
             </a>
           </li>
           <li v-else><p class="nav navbar-text">Kana Pas Pro</p></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right switcher-wrapper">
+          <li>
+            <LanguageSwitcher />
+          </li>
         </ul>
       </div>
     </div>
@@ -55,6 +63,11 @@ const gameState = useGameStateStore()
 #nav-kanaquiz a:hover {
   cursor: default;
 }
+
+.switcher-wrapper {
+  padding-top: 15px;
+}
+
 // From http://getbootstrap.com/examples/non-responsive/non-responsive.css
 .container .navbar-header,
 .container .navbar-collapse {
