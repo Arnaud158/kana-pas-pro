@@ -39,7 +39,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build du projet Vue/Vite
-        run: pnpm exec vite build --base=/kana-pas-pro/
+        run: pnpm exec vite build
+        env:
+          BASE_URL: '/kana-pas-pro/'
 
       - name: Configuration de GitHub Pages
         uses: actions/configure-pages@v6
