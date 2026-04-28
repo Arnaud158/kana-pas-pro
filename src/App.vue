@@ -29,7 +29,19 @@ html {
 body {
   min-height: 100%;
   font-family:
-    'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;
+    /* Latin characters */
+    'Trebuchet MS',
+    'Lucida Grande',
+    'Lucida Sans Unicode',
+    'Lucida Sans',
+    Tahoma,
+    /* Japanese characters */ 'Hiragino Sans',
+    'Hiragino Kaku Gothic ProN',
+    'Meiryo',
+    'Yu Gothic',
+    'Noto Sans CJK JP',
+    'Noto Sans JP',
+    /* default */ sans-serif;
   background-color: #e5e5e5;
   color: #111;
 }

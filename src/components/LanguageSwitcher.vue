@@ -39,7 +39,7 @@ watch(locale, (newLocale) => {
   background: transparent;
   color: inherit;
   border: none;
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   outline: none;
 
