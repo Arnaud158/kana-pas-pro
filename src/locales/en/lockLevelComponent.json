@@ -1,4 +1,5 @@
 {
   "lockLevelText": "Lock to stage",
-  "lockLevelToggleButtonAria": "Toggle stage lock"
+  "lockLevelToggleButtonAria": "Toggle stage lock",
+  "lockLevelLevelSelectionAria": "Level selection"
 }

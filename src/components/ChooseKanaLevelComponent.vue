@@ -2,6 +2,7 @@
 import { useQuestionStore } from '@/stores/questionStore'
 import type Kana from '@/types/kana'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   correctAnswer: Kana
@@ -10,6 +11,8 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits(['answered'])
+const { t } = useI18n()
 
 const questionStore = useQuestionStore()
 
@@ -17,10 +20,18 @@ const isTouchDevice = ref<boolean>(
   globalThis.window !== undefined && 'ontouchstart' in globalThis.window,
 )
 
+const isKanaMode = computed(() => {
+  return props.mode === 'showKana'
+})
+
+const isRomajiMode = computed(() => {
+  return props.mode === 'showRomaji'
+})
+
 const formatedQuestion = computed<string>((): string => {
-  if (props.mode === 'showKana') {
+  if (isKanaMode.value) {
     return props.correctAnswer.kana
-  } else if (props.mode === 'showRomaji') {
+  } else if (isRomajiMode.value) {
     return props.correctAnswer.romaji[0]!
   }
   console.error('Unexpected question mode')
@@ -28,33 +39,37 @@ const formatedQuestion = computed<string>((): string => {
 })
 
 const formatAnswer = (kana: Kana): string => {
-  if (props.mode === 'showKana') {
+  if (isKanaMode.value) {
     return kana.romaji[0]!
-  } else if (props.mode === 'showRomaji') {
+  } else if (isRomajiMode.value) {
     return kana.kana
   }
   console.error('Unexpected question mode')
   return ''
 }
 
-const handleAnswerClick = (kana: Kana, event: PointerEvent) => {
-  const currentBtn = event.currentTarget as HTMLElement
-  currentBtn.blur()
+const handleAnswerClick = async (kana: Kana) => {
   const isCorrectAnswer = kana.kana === props.correctAnswer.kana
+
   questionStore.handleQuestionAnswer(isCorrectAnswer)
+
+  emit('answered')
 }
 </script>
 <template>
-  <div class="big-character">{{ formatedQuestion }}</div>
+  <div class="big-character" :aria-hidden="isKanaMode">{{ formatedQuestion }}</div>
   <div class="answer-container">
     <button
       v-for="kana in possibilties"
       v-bind:key="kana.kana"
       class="btn btn-default answer-button"
       :class="{ 'no-hover': isTouchDevice }"
-      @click="(event) => handleAnswerClick(kana, event)"
+      @click="() => handleAnswerClick(kana)"
     >
-      {{ formatAnswer(kana) }}
+      <span :aria-hidden="isRomajiMode">{{ formatAnswer(kana) }}</span>
+      <span v-if="isRomajiMode" class="sr-only">{{
+        t('chooseKanaLevelComponent.chooseKanaLevelPossibleAnswerAria')
+      }}</span>
     </button>
   </div>
 </template>

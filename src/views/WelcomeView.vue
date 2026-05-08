@@ -70,7 +70,7 @@ watchEffect(() => {
           <div class="col-xs-12">
             <div class="panel panel-default">
               <div class="panel-body welcome">
-                <h4>{{ t('welcomeView.welcomePanelTitle') }}</h4>
+                <h1 class="h4">{{ t('welcomeView.welcomePanelTitle') }}</h1>
                 <p>{{ t('welcomeView.welcomePanelSubtitle') }}</p>
               </div>
             </div>
@@ -115,7 +115,7 @@ watchEffect(() => {
   }
 }
 .error-message {
-  color: #d9534f;
+  color: #d1332e;
   padding-bottom: 10px;
 }
 
@@ -128,7 +128,7 @@ watchEffect(() => {
   bottom: 20px;
   right: 12px;
   color: #fff;
-  background: #d43f3a;
+  background: #d1332e;
   padding: 7px 0 2px;
   width: 60px;
   text-align: center;

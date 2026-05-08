@@ -46,7 +46,7 @@ body {
   color: #111;
 }
 
-*:focus-visible {
+*:focus-visible:not([tabindex='-1']) {
   outline: none !important;
   border-radius: 4px;
   box-shadow: 0 0 0 3px rgba(66, 139, 202, 0.5) !important;

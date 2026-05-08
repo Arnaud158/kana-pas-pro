@@ -1,3 +1,5 @@
 {
-  "previousAnswerNone": "Let's go! Which character is this?"
+  "previousAnswerNone": "Let's go! Which character is this?",
+  "previousAnswerCorrectAnswerAria": "Correct answer!",
+  "previousAnswerWrongAnswerAria": "Wrong answer!"
 }

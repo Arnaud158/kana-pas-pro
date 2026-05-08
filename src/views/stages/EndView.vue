@@ -16,14 +16,14 @@ const handleKeepPlaying = () => {
 <template>
   <div class="text-center show-end">
     <h1>{{ t('endView.endTitle') }}</h1>
-    <h3>{{ t('endView.endSubTitle') }}</h3>
-    <h4>{{ t('endView.endDescription') }}</h4>
-    <p>
+    <p class="h3">{{ t('endView.endSubTitle') }}</p>
+    <p class="h4">{{ t('endView.endDescription') }}</p>
+    <p role="presentation">
       <button class="btn btn-danger keep-playing" @click="handleKeepPlaying">
         {{ t('endView.endKeepPlayingButton') }}
       </button>
     </p>
-    <p>
+    <p role="presentation">
       <button class="btn btn-danger back-to-menu" @click="gameStateStore.finishGame">
         {{ t('endView.endBackToMenuButton') }}
       </button>

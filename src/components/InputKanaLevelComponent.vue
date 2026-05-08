@@ -3,12 +3,14 @@ import { useQuestionStore } from '@/stores/questionStore'
 import type Kana from '@/types/kana'
 import { cartesianProductMultiple } from '@/utils/arrayUtils'
 import { computed, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   correctAnswer: Kana[]
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const questionStore = useQuestionStore()
 
@@ -45,11 +47,17 @@ const handleAnswer = (e: SubmitEvent) => {
 }
 </script>
 <template>
-  <div class="big-character">{{ formatedQuestion }}</div>
+  <div class="big-character" aria-hidden="true">{{ formatedQuestion }}</div>
   <div class="answer-container">
     <div class="answer-form-container">
       <form @submit="handleAnswer">
-        <input v-focus class="answer-input" type="text" v-model="userInput" />
+        <input
+          v-focus
+          class="answer-input"
+          type="text"
+          v-model="userInput"
+          :aria-label="t('inputKanaLevelComponent.inputKanaLevelInputAria')"
+        />
       </form>
     </div>
   </div>

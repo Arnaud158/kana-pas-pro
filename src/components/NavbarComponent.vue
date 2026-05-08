@@ -8,20 +8,25 @@ const { t } = useI18n()
 </script>
 
 <template>
-  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+  <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
       <div id="navbar">
-        <ul class="nav navbar-nav">
-          <li v-if="gameState.gameState === 'game'">
+        <ul class="nav navbar-nav" role="presentation">
+          <li v-if="gameState.gameState === 'game'" role="presentation">
             <button class="nav-button" @click="gameState.finishGame">
-              <span class="glyphicon glyphicon-small glyphicon-arrow-left"></span>
+              <span
+                class="glyphicon glyphicon-small glyphicon-arrow-left"
+                aria-hidden="true"
+              ></span>
               {{ t('navbarComponent.navbarBackToMenu') }}
             </button>
           </li>
-          <li v-else><p class="nav navbar-text">Kana Pas Pro</p></li>
+          <li v-else role="presentation">
+            <p class="nav navbar-text">Kana Pas Pro</p>
+          </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right switcher-wrapper">
-          <li>
+        <ul class="nav navbar-nav navbar-right switcher-wrapper" role="presentation">
+          <li role="presentation">
             <LanguageSwitcher />
           </li>
         </ul>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useChoosenKanaStore } from '@/stores/choosenKanaStore'
 import type KanaGroup from '@/types/kanaGroup'
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 interface Props {
@@ -16,9 +16,16 @@ const { t } = useI18n()
 const showAlternatives = ref<boolean>(false)
 const showAlike = ref<boolean>(false)
 const pressedGroupName = ref<string | null>(null)
+// Linux screen reader have issues to read kana
+const isLinuxDesktop = ref<boolean>(false)
 
 const handlePress = (name: string) => (pressedGroupName.value = name)
 const handleRelease = () => (pressedGroupName.value = null)
+
+onMounted(() => {
+  const ua = globalThis.navigator.userAgent
+  isLinuxDesktop.value = ua.includes('Linux') && !ua.includes('Android')
+})
 
 const baseGroups = computed(() =>
   props.kanaGroups.filter((g) => !g.name.endsWith('_alternative') && !g.name.endsWith('_alike')),
@@ -43,7 +50,11 @@ const alikeSelectionStatus = computed(() => getSelectionStatus(alikeGroups.value
 const accessibleTitle = computed(() => {
   const parts = props.title.split('·')
   if (parts.length === 2) {
-    return { western: parts[0]!.trim(), japanese: parts[1]!.trim() }
+    if (isLinuxDesktop.value) {
+      return parts[0]!.trim()
+    } else {
+      return parts[1]!.trim()
+    }
   }
   return null
 })
@@ -66,6 +77,11 @@ const handleToggleGroup = (groups: KanaGroup[], status: 'none' | 'some' | 'all',
   }
 }
 
+const getFirstPart = (str: string) => {
+  const parts = str.split('(')
+  return parts[0]
+}
+
 const selectAll = () => choosenKanaStore.addKanaGroups(props.kanaGroups)
 const selectNone = () => choosenKanaStore.removeKanaGroups(props.kanaGroups)
 const selectAllAlt = () => choosenKanaStore.addKanaGroups(altGroups.value)
@@ -76,7 +92,11 @@ const getRomaji = (kanaGroup: KanaGroup): string =>
   kanaGroup.kanas.map((kana) => kana.romaji[0]).join(' · ')
 
 const getAccessibleText = (kanaGroup: KanaGroup): string => {
-  return kanaGroup.kanas.map((kana) => kana.romaji[0]).join(', ')
+  if (isLinuxDesktop.value) {
+    return kanaGroup.kanas.map((kana) => kana.romaji[0]).join(', ')
+  }
+
+  return kanaGroup.kanas.map((kana) => kana.kana).join(', ')
 }
 
 const getKana = (kanaGroup: KanaGroup): string => {
@@ -91,42 +111,41 @@ const getKana = (kanaGroup: KanaGroup): string => {
         <span aria-hidden="true">{{ props.title }}</span>
 
         <span v-if="accessibleTitle" class="sr-only">
-          <span lang="ja">{{ accessibleTitle.japanese }}</span>
+          <span lang="ja">{{ accessibleTitle }}</span>
         </span>
         <span v-else class="sr-only">{{ props.title }}</span>
       </div>
       <div class="panel-body selection-areas">
-        <label
-          v-for="kanaGrp in baseGroups"
-          :key="kanaGrp.name"
-          class="choose-row"
-          @mousedown="handlePress(kanaGrp.name)"
-          @mouseup="handleRelease"
-          @touchstart="handlePress(kanaGrp.name)"
-          @touchend="handleRelease"
-        >
+        <template v-for="kanaGrp in baseGroups" :key="kanaGrp.name">
           <input
+            :id="`checkbox_${kanaGrp.name}`"
             type="checkbox"
             class="sr-only-checkbox"
             :checked="isSelected(kanaGrp)"
+            :aria-label="getAccessibleText(kanaGrp)"
             @change="toggleKanaGroup(kanaGrp)"
+            lang="ja"
           />
 
-          <span
-            class="glyphicon glyphicon-small"
-            :class="isSelected(kanaGrp) ? 'glyphicon-check' : 'glyphicon-unchecked'"
+          <label
+            :for="`checkbox_${kanaGrp.name}`"
+            class="choose-row"
             aria-hidden="true"
-          ></span>
+            @mousedown="handlePress(kanaGrp.name)"
+            @mouseup="handleRelease"
+            @touchstart="handlePress(kanaGrp.name)"
+            @touchend="handleRelease"
+          >
+            <span
+              class="glyphicon glyphicon-small"
+              :class="isSelected(kanaGrp) ? 'glyphicon-check' : 'glyphicon-unchecked'"
+            ></span>
 
-          <span aria-hidden="true">
-            {{ pressedGroupName === kanaGrp.name ? getKana(kanaGrp) : getRomaji(kanaGrp) }}
-          </span>
-
-          <span class="sr-only" lang="ja">
-            {{ getAccessibleText(kanaGrp) }}
-          </span>
-        </label>
-
+            <span>
+              {{ pressedGroupName === kanaGrp.name ? getKana(kanaGrp) : getRomaji(kanaGrp) }}
+            </span>
+          </label>
+        </template>
         <div v-if="altGroups.length > 0" class="choose-row header-row">
           <button
             type="button"
@@ -141,54 +160,61 @@ const getKana = (kanaGroup: KanaGroup): string => {
                 half: altSelectionStatus === 'some',
                 'glyphicon-unchecked': altSelectionStatus === 'none',
               }"
+              aria-hidden="true"
             ></span>
           </button>
-          <button type="button" class="text-action" @click="showAlternatives = !showAlternatives">
-            <span class="toggle-caret">{{ showAlternatives ? '▲' : '▼' }}</span>
-            {{ t('chooseKanaComponent.chooseKanaAlternativeCharacters') }}
+          <button
+            type="button"
+            class="text-action"
+            @click="showAlternatives = !showAlternatives"
+            :aria-label="getFirstPart(t('chooseKanaComponent.chooseKanaAlternativeCharacters'))"
+          >
+            <span class="toggle-caret" aria-hidden="true">{{ showAlternatives ? '▲' : '▼' }}</span>
+            <span aria-hidden="true">{{
+              t('chooseKanaComponent.chooseKanaAlternativeCharacters')
+            }}</span>
           </button>
         </div>
 
         <template v-if="showAlternatives">
-          <label
-            v-for="kanaGrp in altGroups"
-            :key="kanaGrp.name"
-            class="choose-row alt-row"
-            :class="{
-              'divider-row': [
-                'hiragana_group_16_alternative',
-                'katakana_group_18_alternative',
-                'katakana_group_29_alternative',
-              ].includes(kanaGrp.name),
-            }"
-            @mousedown="handlePress(kanaGrp.name)"
-            @mouseup="handleRelease"
-            @touchstart="handlePress(kanaGrp.name)"
-            @touchend="handleRelease"
-          >
+          <template v-for="kanaGrp in altGroups" :key="kanaGrp.name">
             <input
+              :id="`checkbox_alt_${kanaGrp.name}`"
               type="checkbox"
               class="sr-only-checkbox"
               :checked="isSelected(kanaGrp)"
+              :aria-label="getAccessibleText(kanaGrp)"
               @change="toggleKanaGroup(kanaGrp)"
+              lang="ja"
             />
 
-            <span
-              class="glyphicon glyphicon-small"
-              :class="isSelected(kanaGrp) ? 'glyphicon-check' : 'glyphicon-unchecked'"
-              aria-hidden="true"
-            ></span>
+            <label
+              :for="`checkbox_alt_${kanaGrp.name}`"
+              class="choose-row alt-row"
+              :class="{
+                'divider-row': [
+                  'hiragana_group_16_alternative',
+                  'katakana_group_18_alternative',
+                  'katakana_group_29_alternative',
+                ].includes(kanaGrp.name),
+              }"
+              @mousedown="handlePress(kanaGrp.name)"
+              @mouseup="handleRelease"
+              @touchstart="handlePress(kanaGrp.name)"
+              @touchend="handleRelease"
+            >
+              <span
+                class="glyphicon glyphicon-small"
+                :class="isSelected(kanaGrp) ? 'glyphicon-check' : 'glyphicon-unchecked'"
+                aria-hidden="true"
+              ></span>
 
-            <span aria-hidden="true">
-              {{ pressedGroupName === kanaGrp.name ? getKana(kanaGrp) : getRomaji(kanaGrp) }}
-            </span>
-
-            <span class="sr-only" lang="ja">
-              {{ getAccessibleText(kanaGrp) }}
-            </span>
-          </label>
+              <span aria-hidden="true">
+                {{ pressedGroupName === kanaGrp.name ? getKana(kanaGrp) : getRomaji(kanaGrp) }}
+              </span>
+            </label>
+          </template>
         </template>
-
         <div v-if="alikeGroups.length > 0" class="choose-row header-row">
           <button
             type="button"
@@ -207,64 +233,64 @@ const getKana = (kanaGroup: KanaGroup): string => {
             ></span>
           </button>
           <button type="button" class="text-action" @click="showAlike = !showAlike">
-            <span class="toggle-caret">{{ showAlike ? '▲' : '▼' }}</span>
+            <span class="toggle-caret" aria-hidden="true">{{ showAlike ? '▲' : '▼' }}</span>
             {{ t('chooseKanaComponent.chooseKanaLookAlikeCharacters') }}
           </button>
         </div>
 
         <template v-if="showAlike">
-          <label
-            v-for="kanaGrp in alikeGroups"
-            :key="kanaGrp.name"
-            class="choose-row alt-row"
-            :class="{
-              'divider-row': [
-                'hiragana_group_16_alternative',
-                'katakana_group_18_alternative',
-                'katakana_group_29_alternative',
-              ].includes(kanaGrp.name),
-            }"
-            @mousedown="handlePress(kanaGrp.name)"
-            @mouseup="handleRelease"
-            @touchstart="handlePress(kanaGrp.name)"
-            @touchend="handleRelease"
-          >
+          <template v-for="kanaGrp in alikeGroups" :key="kanaGrp.name">
             <input
+              :id="`checkbox_alike_${kanaGrp.name}`"
               type="checkbox"
               class="sr-only-checkbox"
               :checked="isSelected(kanaGrp)"
+              :aria-label="getAccessibleText(kanaGrp)"
               @change="toggleKanaGroup(kanaGrp)"
+              lang="ja"
             />
 
-            <span
-              class="glyphicon glyphicon-small"
-              :class="isSelected(kanaGrp) ? 'glyphicon-check' : 'glyphicon-unchecked'"
-              aria-hidden="true"
-            ></span>
+            <label
+              :for="`checkbox_alike_${kanaGrp.name}`"
+              class="choose-row alt-row"
+              :class="{
+                'divider-row': [
+                  'hiragana_group_16_alternative',
+                  'katakana_group_18_alternative',
+                  'katakana_group_29_alternative',
+                ].includes(kanaGrp.name),
+              }"
+              @mousedown="handlePress(kanaGrp.name)"
+              @mouseup="handleRelease"
+              @touchstart="handlePress(kanaGrp.name)"
+              @touchend="handleRelease"
+            >
+              <span
+                class="glyphicon glyphicon-small"
+                :class="isSelected(kanaGrp) ? 'glyphicon-check' : 'glyphicon-unchecked'"
+                aria-hidden="true"
+              ></span>
 
-            <span aria-hidden="true">
-              {{ pressedGroupName === kanaGrp.name ? getKana(kanaGrp) : getRomaji(kanaGrp) }}
-            </span>
-
-            <span class="sr-only" lang="ja">
-              {{ getAccessibleText(kanaGrp) }}
-            </span>
-          </label>
+              <span aria-hidden="true">
+                {{ pressedGroupName === kanaGrp.name ? getKana(kanaGrp) : getRomaji(kanaGrp) }}
+              </span>
+            </label>
+          </template>
         </template>
       </div>
       <div class="panel-footer">
         <button type="button" class="btn btn-link" @click="selectAll">
           {{ t('chooseKanaComponent.chooseKanaFilterAll') }}
         </button>
-        &nbsp;&middot;&nbsp;
+        <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
         <button type="button" class="btn btn-link" @click="selectNone">
           {{ t('chooseKanaComponent.chooseKanaFilterNone') }}
         </button>
-        &nbsp;&middot;&nbsp;
+        <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
         <button type="button" class="btn btn-link" @click="selectAllAlt">
           {{ t('chooseKanaComponent.chooseKanaFilterAllAlternative') }}
         </button>
-        &nbsp;&middot;&nbsp;
+        <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
         <button type="button" class="btn btn-link" @click="selectNoneAlt">
           {{ t('chooseKanaComponent.chooseKanaFilterNoAlternative') }}
         </button>
@@ -355,14 +381,14 @@ div.header-row {
   border-width: 0;
 }
 
-label.choose-row:has(input.sr-only-checkbox:focus-visible) {
+input.sr-only-checkbox:focus-visible + label.choose-row,
+input.sr-only-checkbox:focus-visible + label.alt-row {
   outline: none !important;
   border-radius: 4px;
   box-shadow: 0 0 0 3px rgba(66, 139, 202, 0.5) !important;
   position: relative;
   z-index: 10;
 }
-
 .panel-heading {
   font-weight: bold;
 }

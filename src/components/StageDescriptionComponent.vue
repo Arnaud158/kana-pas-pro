@@ -37,8 +37,8 @@ const handleTransitionEnd = () => {
   <Transition name="stage" @after-leave="handleTransitionEnd">
     <div v-if="isVisible" class="text-center show-stage">
       <h1>{{ props.title }}</h1>
-      <h3 v-if="props.description">{{ props.description }}</h3>
-      <h4 v-if="props.secondaryDescription">{{ props.secondaryDescription }}</h4>
+      <p class="h3" v-if="props.description">{{ props.description }}</p>
+      <p class="h4" v-if="props.secondaryDescription">{{ props.secondaryDescription }}</p>
     </div>
   </Transition>
 </template>

@@ -1,4 +1,5 @@
 {
   "progressBarStageText": "Stage",
-  "progressBarLockText": "(Locked)"
+  "progressBarLockText": "(Locked)",
+  "progressBarStageProgressBarAria": "Stage progress"
 }

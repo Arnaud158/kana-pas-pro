@@ -16,7 +16,7 @@ const stageProgressPercentage = computed<number>(() => {
   <div class="progress">
     <progress
       class="native-progress"
-      aria-label="Stage progress"
+      :aria-label="t('progressBarComponent.progressBarStageProgressBarAria')"
       :value="stageStore.currentProgress"
       :max="stageStore.stageLength"
       :style="{ '--progress-percent': stageProgressPercentage + '%' }"

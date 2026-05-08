@@ -29,19 +29,23 @@ const formattedAnswer = computed(() => {
 })
 </script>
 <template>
-  <div v-if="props.correctAnswer === true" class="previous-result correct" title="Correct answer!">
-    <span class="pull-left glyphicon glyphicon-none"></span>
+  <div
+    v-if="props.correctAnswer === true"
+    class="previous-result correct"
+    :title="t('previousAnswerComponent.previousAnswerCorrectAnswerAria')"
+  >
+    <span class="pull-left glyphicon glyphicon-none" aria-hidden="true"></span>
     {{ formattedAnswer }}
-    <span class="pull-right glyphicon glyphicon-ok"></span>
+    <span class="pull-right glyphicon glyphicon-ok" aria-hidden="true"></span>
   </div>
   <div
     v-else-if="props.correctAnswer === false"
     class="previous-result wrong"
-    title="Wrong answer!"
+    :title="t('previousAnswerComponent.previousAnswerWrongAnswerAria')"
   >
-    <span class="pull-left glyphicon glyphicon-none"></span>
+    <span class="pull-left glyphicon glyphicon-none" aria-hidden="true"></span>
     {{ formattedAnswer }}
-    <span class="pull-right glyphicon glyphicon-remove"></span>
+    <span class="pull-right glyphicon glyphicon-remove" aria-hidden="true"></span>
   </div>
   <div v-else class="previous-result none">
     {{ t('previousAnswerComponent.previousAnswerNone') }}
@@ -59,14 +63,14 @@ const formattedAnswer = computed(() => {
 }
 .none {
   color: #f5f5f5;
-  background-color: #aaa;
+  background-color: #6e6e6e;
 }
 .correct {
   color: #f5f5f5;
-  background-color: #5cb85c;
+  background-color: #357e35;
 }
 .wrong {
   color: #f5f5f5;
-  background-color: #d9534f;
+  background-color: #d1332e;
 }
 </style>

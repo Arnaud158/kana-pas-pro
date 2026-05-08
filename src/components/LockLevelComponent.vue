@@ -1,28 +1,40 @@
 <script setup lang="ts">
 import { useLockStore } from '@/stores/lockStore'
 import type { StageLevel } from '@/types/stageLevel'
-import { ref, watchEffect } from 'vue'
+import { nextTick, ref, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const lockStore = useLockStore()
 const { t } = useI18n()
 
 const lockLevel = ref<string>(lockStore.lockLevel)
+const selectRef = ref<HTMLSelectElement | null>(null)
 
 watchEffect(() => {
   if (!lockLevel.value) return
   const data = lockLevel.value as StageLevel
   lockStore.lockLevel = data
 })
+
+const handleLockLevel = async () => {
+  if (lockStore.isLocked) {
+    lockLevel.value = '1'
+
+    await nextTick()
+
+    selectRef.value?.focus()
+  }
+}
 </script>
 <template>
   <span class="pull-right lock"
     >{{ t('lockLevelComponent.lockLevelText') }} &nbsp;
     <select
-      v-model="lockLevel"
       v-if="lockStore.isLocked"
+      ref="selectRef"
+      v-model="lockLevel"
       class="stage-choice"
-      :aria-label="t('lockLevelComponent.lockLevelText')"
+      :aria-label="t('lockLevelComponent.lockLevelLevelSelectionAria')"
     >
       <option value="1" selected>1</option>
       <option value="2">2</option>
@@ -32,7 +44,7 @@ watchEffect(() => {
     <input
       type="checkbox"
       v-model="lockStore.isLocked"
-      @change="() => (lockLevel = '1')"
+      @change="handleLockLevel"
       :aria-label="t('lockLevelComponent.lockLevelToggleButtonAria')"
     />
   </span>
