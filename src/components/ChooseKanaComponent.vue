@@ -117,14 +117,17 @@ const getKana = (kanaGroup: KanaGroup): string => {
       </div>
       <div class="panel-body selection-areas">
         <template v-for="kanaGrp in baseGroups" :key="kanaGrp.name">
+          <span :id="`a11y_${kanaGrp.name}`" hidden lang="ja">
+            {{ getAccessibleText(kanaGrp) }}
+          </span>
+
           <input
             :id="`checkbox_${kanaGrp.name}`"
             type="checkbox"
             class="sr-only-checkbox"
             :checked="isSelected(kanaGrp)"
-            :aria-label="getAccessibleText(kanaGrp)"
+            :aria-labelledby="`a11y_${kanaGrp.name}`"
             @change="toggleKanaGroup(kanaGrp)"
-            lang="ja"
           />
 
           <label
@@ -178,14 +181,17 @@ const getKana = (kanaGroup: KanaGroup): string => {
 
         <template v-if="showAlternatives">
           <template v-for="kanaGrp in altGroups" :key="kanaGrp.name">
+            <span :id="`a11y_${kanaGrp.name}`" hidden lang="ja">
+              {{ getAccessibleText(kanaGrp) }}
+            </span>
+
             <input
               :id="`checkbox_alt_${kanaGrp.name}`"
               type="checkbox"
               class="sr-only-checkbox"
               :checked="isSelected(kanaGrp)"
-              :aria-label="getAccessibleText(kanaGrp)"
+              :aria-labelledby="`a11y_${kanaGrp.name}`"
               @change="toggleKanaGroup(kanaGrp)"
-              lang="ja"
             />
 
             <label
@@ -240,14 +246,17 @@ const getKana = (kanaGroup: KanaGroup): string => {
 
         <template v-if="showAlike">
           <template v-for="kanaGrp in alikeGroups" :key="kanaGrp.name">
+            <span :id="`a11y_${kanaGrp.name}`" hidden lang="ja">
+              {{ getAccessibleText(kanaGrp) }}
+            </span>
+
             <input
               :id="`checkbox_alike_${kanaGrp.name}`"
               type="checkbox"
               class="sr-only-checkbox"
               :checked="isSelected(kanaGrp)"
-              :aria-label="getAccessibleText(kanaGrp)"
+              :aria-labelledby="`a11y_${kanaGrp.name}`"
               @change="toggleKanaGroup(kanaGrp)"
-              lang="ja"
             />
 
             <label
