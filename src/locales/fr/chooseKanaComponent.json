@@ -1,4 +1,12 @@
 {
   "chooseKanaHiraganaTitle": "Hiragana · ひらがな",
-  "chooseKanaKatakanaTitle": "Katakana · カタカナ"
+  "chooseKanaKatakanaTitle": "Katakana · カタカナ",
+  "chooseKanaAlternativeCharacters": "Diacritiques et combinaisons (ga · ba · kya...)",
+  "chooseKanaAlternativeCharactersButtonAria": "Activer les diacritiques et combinaisons",
+  "chooseKanaLookAlikeCharacters": "Caractères similaires",
+  "chooseKanaLookAlikeCharactersButtonAria": "Activer tous les caractères similaires",
+  "chooseKanaFilterAll": "Tous",
+  "chooseKanaFilterNone": "Aucun",
+  "chooseKanaFilterAllAlternative": "Toutes les versions alternatives",
+  "chooseKanaFilterNoAlternative": "Aucune version alternative"
 }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { kanaDictionary } from '@/assets/kanaDictionary'
 import ChooseKanaComponent from '@/components/ChooseKanaComponent.vue'
+import FooterComponent from '@/components/FooterComponent.vue'
 import LockLevelComponent from '@/components/LockLevelComponent.vue'
 import { useChoosenKanaStore } from '@/stores/choosenKanaStore'
 import { useGameStateStore } from '@/stores/gameStateStore'
@@ -85,7 +86,7 @@ watchEffect(() => {
             :title="t('chooseKanaComponent.chooseKanaKatakanaTitle')"
             :kanaGroups="kanaDictionary.katakana"
           />
-          <div class="col-sm-3 col-xs-12 pull-right">
+          <div class="col-sm-6 col-xs-12 pull-right">
             <LockLevelComponent />
           </div>
           <div class="col-sm-offset-3 col-sm-6 col-xs-12 text-center">
@@ -103,6 +104,7 @@ watchEffect(() => {
       </div>
     </div>
   </div>
+  <FooterComponent />
 </template>
 
 <style lang="scss" scoped>
@@ -130,7 +132,7 @@ watchEffect(() => {
   color: #fff;
   background: #d1332e;
   padding: 7px 0 2px;
-  width: 60px;
+  width: 70px;
   text-align: center;
 }
 
@@ -142,9 +144,9 @@ watchEffect(() => {
   top: 100%;
   width: 0;
   height: 0;
-  border-top: 10px solid #d43f3a;
-  border-right: 30px solid transparent;
+  border-top: 10px solid #d1332e;
+  border-right: 35px solid transparent;
   border-bottom: 0 solid transparent;
-  border-left: 30px solid transparent;
+  border-left: 35px solid transparent;
 }
 </style>

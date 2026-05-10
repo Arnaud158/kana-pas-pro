@@ -276,15 +276,15 @@ const getKana = (kanaGroup: KanaGroup): string => {
         <button type="button" class="btn btn-link" @click="selectAll">
           {{ t('chooseKanaComponent.chooseKanaFilterAll') }}
         </button>
-        <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+        <span aria-hidden="true" class="hide-on-mobile">&nbsp;&middot;&nbsp;</span>
         <button type="button" class="btn btn-link" @click="selectNone">
           {{ t('chooseKanaComponent.chooseKanaFilterNone') }}
         </button>
-        <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+        <span aria-hidden="true" class="hide-on-mobile">&nbsp;&middot;&nbsp;</span>
         <button type="button" class="btn btn-link" @click="selectAllAlt">
           {{ t('chooseKanaComponent.chooseKanaFilterAllAlternative') }}
         </button>
-        <span aria-hidden="true">&nbsp;&middot;&nbsp;</span>
+        <span aria-hidden="true" class="hide-on-mobile">&nbsp;&middot;&nbsp;</span>
         <button type="button" class="btn btn-link" @click="selectNoneAlt">
           {{ t('chooseKanaComponent.chooseKanaFilterNoAlternative') }}
         </button>
@@ -393,8 +393,24 @@ input.sr-only-checkbox:focus-visible + label.alt-row {
 
 .panel-footer {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    column-gap: 10px;
+    row-gap: 2px;
+    padding: 12px;
+
+    .btn-link {
+      flex: 0 0 auto;
+      padding: 5px;
+    }
+  }
+}
+.hide-on-mobile {
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
 .toggle-caret {

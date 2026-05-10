@@ -22,6 +22,7 @@ watchEffect(() => {
 </template>
 
 <style lang="scss">
+@use 'sass:color';
 html {
   height: 100%; /* height sets are for android chrome background fix */
   min-height: 100%;
@@ -86,7 +87,19 @@ body {
   color: transparent !important;
 }
 .btn-link {
-  color: #3473a7;
+  color: #31699b;
+}
+a[href] {
+  color: #31699b;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+
+  &:hover,
+  &:active {
+    color: color.adjust(#3473a7, $lightness: -15%);
+    text-decoration-thickness: 2px;
+  }
 }
 .btn-danger {
   background-color: #d43f3a;
